@@ -1,0 +1,26 @@
+﻿{
+  "name": "azure-contract",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Azure — AI dispute-resolution contract for GenLayer, deployed on studio-dev (61997) and legacy studionet (61999): staked two-party disputes, evidence consent ceremony, consensus LLM verdicts, deadline default judgments, native-GEN payouts.",
+  "scripts": {
+    "deploy": "node --env-file=.env deploy_devnet.mjs",
+    "deploy:studionet": "node --env-file=.env deploy_studionet.mjs",
+    "smoke": "node --env-file=.env probe_smoke_sn.mjs",
+    "read": "node --env-file=.env read_az2.mjs",
+    "accept": "node --env-file=.env probe_accept_sn.mjs",
+    "balances": "node --env-file=.env balance_check.mjs"
+  },
+  "keywords": [
+    "genlayer",
+    "genvm",
+    "dispute-resolution",
+    "llm",
+    "smart-contract",
+    "escrow"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "genlayer-js": "^2.0.0-rc.1"
+  }
+}

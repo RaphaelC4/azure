@@ -1,0 +1,199 @@
+/* Hallmark · macrostructure: Ledger — Premium 8k Edition · genre: editorial-brutalist-luxe · anchor hue: brass 85deg */
+@import "tailwindcss";
+
+:root {
+  --color-paper: oklch(14% 0.012 262);
+  --color-paper-2: oklch(18.5% 0.015 262);
+  --color-paper-3: oklch(22.5% 0.016 262);
+  --color-paper-4: oklch(27% 0.016 262);
+  --color-rule: oklch(29% 0.016 262);
+  --color-rule-strong: oklch(36% 0.018 262);
+  --color-ink: oklch(93% 0.015 85);
+  --color-ink-dim: oklch(69% 0.019 85);
+  --color-ink-faint: oklch(58% 0.015 262); /* +6% L vs initial — legible on cheap panels */
+  --color-ink-fainter: oklch(48% 0.013 262); /* +6% L vs initial */
+  --color-accent: oklch(72% 0.13 85);
+  --color-accent-bright: oklch(81% 0.15 88);
+  --color-accent-dim: oklch(62% 0.11 85);
+  --color-accent-soft: oklch(72% 0.13 85 / 0.12);
+  --color-evidence: oklch(62% 0.07 250);
+  --color-evidence-bright: oklch(72% 0.08 250);
+  --color-breach: oklch(55% 0.14 30);
+  --color-success: oklch(68% 0.12 145);
+
+  --font-display: Georgia, "Iowan Old Style", "Palatino Linotype", "Book Antiqua", serif; /* fallback — next/font Newsreader overrides via body class */
+  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 150ms;
+  --dur-base: 260ms;
+}
+
+@theme inline {
+  --color-paper: var(--color-paper);
+  --color-ink: var(--color-ink);
+  --color-accent: var(--color-accent);
+}
+
+html { scroll-behavior: smooth; overflow-x: clip; }
+body {
+  overflow-x: clip;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+.font-display { font-family: var(--font-display); }
+.font-mono { font-family: var(--font-mono); }
+h1,h2,h3,h4 { overflow-wrap: anywhere; min-width: 0; text-wrap: balance; }
+
+/* Grain — breaks digital flatness */
+.grain::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Glass */
+.glass {
+  background: color-mix(in oklch, var(--color-paper-2) 78%, transparent);
+  backdrop-filter: blur(16px) saturate(1.2);
+  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+  border: 1px solid color-mix(in oklch, var(--color-rule) 80%, transparent);
+  box-shadow: 0 8px 32px oklch(0% 0 0 / 0.35), inset 0 1px 0 oklch(100% 0 0 / 0.06);
+}
+/* Hero footer — the footer sits on a photo band: translucent paper scrim + a
+   frosted backdrop blur over it, footer content lifted above (::before is the
+   overlay, children get z-index 1). Pages override the photo via the `photo`
+   prop on <SiteFooter />; default keeps the homepage look. */
+.footer-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.footer-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: color-mix(in oklch, var(--color-paper) 62%, transparent);
+  backdrop-filter: blur(10px) saturate(1.2);
+  -webkit-backdrop-filter: blur(10px) saturate(1.2);
+}
+/* Top blend — the photo band fades out of the page's paper color from the top
+   edge, so the footer melts into the page instead of starting as a hard edge.
+   Content sits above (z-1); `pointer-events: none` keeps it non-blocking. */
+.footer-hero::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: clamp(3rem, 8vw, 6rem);
+  z-index: 0;
+  background: linear-gradient(
+    to bottom,
+    var(--color-paper) 0%,
+    color-mix(in oklch, var(--color-paper) 0%, transparent) 100%
+  );
+  pointer-events: none;
+}
+.footer-hero > * {
+  position: relative;
+  z-index: 1;
+}
+/* Photo band — dark scrim over a photo, fading to solid paper by 85% of the
+   section height (keeps a photo tail at the base for the glass footer to
+   frost). Pages override the photo via --section-photo (inline style);
+   default keeps the homepage look. Remove the gradient layer to see the raw
+   photo. */
+.landing-section {
+  position: relative;
+  background-image:
+    linear-gradient(180deg, color-mix(in oklch, var(--color-paper) 72%, transparent) 0%, var(--color-paper) 85%),
+    var(--section-photo, url('/images/access-bg.jpg'));
+  background-size: cover;       /* Ensures full coverage */
+  background-repeat: no-repeat; /* Prevents tiling */
+  background-position: center;  /* Keeps focal point centered */
+}
+
+/* Spotlight border — illuminates under cursor */
+.spotlight {
+  position: relative;
+  overflow: hidden;
+}
+.spotlight::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: radial-gradient(420px circle at var(--mx,50%) var(--my,50%), oklch(72% 0.13 85 / 0.9), transparent 40%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 300ms var(--ease-out);
+  pointer-events: none;
+}
+.spotlight:hover::before { opacity: 1; }
+
+/* Perforated ticket */
+.perforated { position: relative; }
+.perforated::before {
+  content:"";
+  position:absolute; top:0; bottom:0; left:0; width:1px;
+  background-image: radial-gradient(circle, var(--color-paper) 2.5px, transparent 2.6px);
+  background-size: 100% 16px;
+  background-repeat: repeat-y;
+  background-position: left center;
+  box-shadow: -1px 0 0 0 var(--color-rule);
+}
+.perforated::after {
+  content:""; position:absolute; top:-9px; left:-9px; width:18px; height:18px; border-radius:999px;
+  background: var(--color-paper); box-shadow: 0 0 0 1px var(--color-rule);
+}
+.seal { transform: rotate(-8deg); }
+
+/* Reveal */
+@keyframes fadeUp { from { opacity:0; transform: translateY(14px);} to {opacity:1; transform:translateY(0);} }
+@keyframes stampIn { 0%{opacity:0; transform: rotate(-8deg) scale(1.4);} 60%{opacity:1; transform: rotate(-8deg) scale(1);} 100%{opacity:1; transform: rotate(-8deg) scale(1);} }
+@keyframes shimmer { 0%{transform: translateX(-100%);} 100%{transform: translateX(100%);} }
+@keyframes pulseDot { 0%,100%{opacity:1} 50%{opacity:0.4} }
+.reveal { animation: fadeUp 700ms var(--ease-out) both; }
+.reveal-d1 { animation-delay: 80ms; }
+.reveal-d2 { animation-delay: 160ms; }
+.reveal-d3 { animation-delay: 240ms; }
+.reveal-d4 { animation-delay: 320ms; }
+
+a,button { transition: color var(--dur-base) var(--ease-out), background-color var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out), transform var(--dur-fast) var(--ease-out), opacity var(--dur-base) var(--ease-out); }
+a:hover, button:hover { transition-duration: 180ms; }
+
+:focus-visible { outline: 2px solid var(--color-accent-bright); outline-offset: 2px; }
+::selection { background: var(--color-accent); color: var(--color-paper); }
+
+/* Overflow strips (mobile tab bar, chain ticker) scroll without a visible scrollbar */
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *,*::before,*::after{ animation-duration:0.01ms !important; transition-duration:0.01ms !important; scroll-behavior:auto !important; }
+}
+
+/* Scrollbar progress */
+#progress { transform-origin: left; }
+
+/* Hairline */
+.hr { height: 1px; background: var(--color-rule); }
+.hr-double { height: 3px; background: repeating-linear-gradient(to bottom, var(--color-rule) 0 1px, transparent 1px 2px, var(--color-rule) 2px 3px); border: none; }
+

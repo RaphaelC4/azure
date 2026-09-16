@@ -1,0 +1,34 @@
+# dependencies
+/node_modules
+
+# next.js
+.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.dev-server.log
+
+# env files — never commit secrets or the contract key set
+.env*.local
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# stray dev-server artifacts (nested build output from a mis-routed next dev)
+/azure-landing/
+
+# agent tooling / local-only
+.sixth/
+CLAUDE.md
+_archive/
