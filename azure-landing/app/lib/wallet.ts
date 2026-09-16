@@ -235,6 +235,12 @@ async function connectWalletConnect() {
     // without reconnecting (the switcher re-issues wallet_switchEthereumChain).
     optionalChains: Array.from(new Set([CHAIN_ID, 61997, 61999])),
     methods: WC_METHODS,
+    // The SDK (2.23.x) hardcodes wss://relay.walletconnect.org as its default
+    // relay, and some browser/AV web filters block that host on real domains
+    // (localhost is exempt) — the QR then renders but pairing never starts.
+    // .org and .com are the same relay backend (identical IPs); pin the
+    // canonical .com host, which is far less likely to be on filter lists.
+    relayUrl: "wss://relay.walletconnect.com",
     showQrModal: true,
   });
   await provider.connect(); // opens the WalletConnect QR modal
@@ -313,6 +319,8 @@ export async function restoreWallet(): Promise<void> {
         chains: [CHAIN_ID],
         optionalChains: [CHAIN_ID],
         methods: WC_METHODS,
+        // Same relay pin as connectWalletConnect (see there for why).
+        relayUrl: "wss://relay.walletconnect.com",
         showQrModal: true,
       });
       const hasSession = Boolean((provider as unknown as { session?: unknown }).session);
