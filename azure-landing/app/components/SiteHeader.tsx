@@ -71,17 +71,24 @@ export default function SiteHeader() {
             <Link href="/file" className="hidden rounded-full px-5 py-2.5 text-sm font-medium transition hover:opacity-90 active:scale-[0.98] sm:inline-flex" style={{ background: "var(--color-accent)", color: "var(--color-paper)" }}>
               File a dispute
             </Link>
-            <NetSwitcher />
+            {/* Phones: the toggle lives in the mobile nav bar below (it wraps, so it
+                can't overflow). >=sm keeps the deployed desktop layout untouched. */}
+            <div className="max-sm:hidden">
+              <NetSwitcher />
+            </div>
             <WalletButton />
           </div>
         </div>
         {/* Mobile nav */}
-        <div className="flex flex-wrap gap-x-4 gap-y-2.5 border-t px-6 py-3 text-sm lg:hidden" style={{ borderColor: "var(--color-rule)", background: "color-mix(in oklch, var(--color-paper) 88%, transparent)" }}>
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2.5 border-t px-6 py-3 text-sm lg:hidden" style={{ borderColor: "var(--color-rule)", background: "color-mix(in oklch, var(--color-paper) 88%, transparent)" }}>
           {navLinks.map((l) => (
             <Link key={l.href} href={l.href} className="whitespace-nowrap font-mono text-xs uppercase tracking-widest" style={{ color: pathname === l.href ? "var(--color-accent)" : "var(--color-ink-dim)" }}>
               {l.label}
             </Link>
           ))}
+          <div className="ml-auto sm:hidden">
+            <NetSwitcher compact />
+          </div>
         </div>
       </header>
     </>

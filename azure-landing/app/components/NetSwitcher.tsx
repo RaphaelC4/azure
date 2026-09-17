@@ -12,7 +12,7 @@ const ORDER: NetId[] = ["studio-dev", "studionet"];
     write app-wide and walks a connected wallet over to the net's chain
     (best effort - a rejected switch prompt just means the next write will
     ask for it again). */
-export default function NetSwitcher() {
+export default function NetSwitcher({ compact = false }: { compact?: boolean }) {
   const { netId, net, setNet } = useNet();
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -56,14 +56,17 @@ export default function NetSwitcher() {
         aria-expanded={open}
         aria-haspopup="menu"
         title={`${net.label} - ${net.status}`}
-        className="inline-flex items-center gap-2 rounded-full border px-4 py-2.5 font-mono text-sm transition hover:bg-[var(--color-paper-2)]"
+        className={`inline-flex min-w-0 items-center gap-2 rounded-full border transition hover:bg-[var(--color-paper-2)] ${
+          // compact: mobile nav-bar instance only; desktop keeps the original sizing
+          compact ? "max-w-[46vw] px-3 py-1.5 text-xs" : "px-4 py-2.5 font-mono text-sm"
+        }`}
         style={{ borderColor: "var(--color-rule)", color: "var(--color-ink)", background: "var(--color-paper-2)" }}
       >
         <span
           className="h-1.5 w-1.5 rounded-full"
           style={{ background: net.writesAvailable ? "var(--color-success)" : "var(--color-evidence-bright)" }}
         />
-        {net.label}
+        <span className="min-w-0 truncate">{net.label}</span>
         <svg
           width="10"
           height="10"
@@ -77,7 +80,7 @@ export default function NetSwitcher() {
       {open && (
         <div
           role="menu"
-          className="absolute right-0 top-[calc(100%+8px)] z-50 min-w-[220px] overflow-hidden rounded-xl border py-1 shadow-lg"
+          className="absolute right-0 top-[calc(100%+8px)] z-50 max-w-[calc(100vw-24px)] min-w-[220px] overflow-hidden rounded-xl border py-1 shadow-lg"
           style={{ borderColor: "var(--color-rule)", background: "var(--color-paper-2)" }}
         >
           <div className="px-3 pb-1 pt-2 text-[11px] font-medium" style={{ color: "var(--color-ink)" }}>
